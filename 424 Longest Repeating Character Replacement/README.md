@@ -5,8 +5,6 @@
 
 ## Method 1
 
-### Problem: Longest Substring with K Character Replacements
-
 We can solve this problem using the **sliding window** approach:
 
 1. **Initialize two pointers**: Both `left` and `right` start at the beginning of the string.
