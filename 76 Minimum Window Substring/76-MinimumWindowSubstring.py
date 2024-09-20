@@ -1,4 +1,27 @@
 class Solution:
+    """
+        Use sliding window approach to solve the problem
+            in a nutshell the problem is to find the smallest substring that has all letters from t in s, can also have other letters
+            and the return value is the actual substring itself
+
+        First, we get a count of every letter in t
+
+        Loop thru string s - using your right pointer
+            left & right pointers are in the same location
+            have two variables have & need
+                have - is the count of letters from t we currently have in our window in this iteration of s
+                need - is the count of letters from t we're required to have
+            As looping thru the input s string, increment have as you find variables in t - ignore for the other letters
+
+            check if at any time have == need, 
+                if they are it means in the current window we have all the letters from t
+                but since our objective is to find the minimum substring, start removing letters from left pointer
+                update the result length & start & end index of current window as you go
+                and if at any point you eat into something in the have string, decrement accordingly
+
+        loop thru the end of the string
+            the final result length & start, end index of substring is in the result variables 
+    """
     def minWindow(self, s: str, t: str) -> str:
         if t == "": return "" # edge case to handle empty t string
 
@@ -8,7 +31,7 @@ class Solution:
         # populate countT
         for i in t:
             countT[i] = 1 + countT.get(i, 0)
-        
+
         # Initialize variables for recording result & result length
         res, resLen = [-1, -1], float("infinity")
         have, need = 0, len(countT) # create two variables to keep track of have (counts of s) & need (counts of t) 
