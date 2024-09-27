@@ -25,17 +25,18 @@ class Solution:
             cnt1[s1[i]] = 1 + cnt1.get(s1[i], 0)
             cnt2[s2[i]] = 1 + cnt2.get(s2[i], 0)
 
+        # check if both hashmaps are equal
+        if cnt1 == cnt2:
+            return True # return true if they are
+
         # initialize left pointer
         l = 0
 
         # loop thru s2 other than the character already looped thru above
         for r in range(len(s1), len(s2)):
-            # check if both hashmaps are equal
-            if cnt1 == cnt2:
-                return True # return true if they are
-
             # if hashmaps aren't equal, add the next right pointer value to hashmap & update count
             cnt2[s2[r]] = 1 + cnt2.get(s2[r], 0)
+
             # update left pointer value count in hashmap
             cnt2[s2[l]] -= 1
             if cnt2[s2[l]] == 0: # check if any value in the hashmap is 0, if it is pop that value
@@ -43,10 +44,10 @@ class Solution:
 
             l += 1 # increment left pointer
 
-        # check if hashmaps are equal one last time & return appropriate values
-        if cnt1 == cnt2:
-            return True
-        else:
-            return False
+            # check if both hashmaps are equal
+            if cnt1 == cnt2:
+                return True # return true if they are
+
+        return False
 
 
