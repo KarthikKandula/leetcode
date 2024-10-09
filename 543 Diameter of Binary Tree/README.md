@@ -2,7 +2,7 @@
 
 1 possible solution for this problem  
 
-## Method 1 (Iterative approach)
+## Method 1
 
 To find the diameter of a binary tree using a recursive DFS approach, follow these steps:
 
