@@ -1,65 +1,79 @@
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val = 0, neighbors = None):
-        self.val = val
-        self.neighbors = neighbors if neighbors is not None else []
-"""
-
-from typing import Optional
 class Solution:
     """
-    we can solve this problem using dfs graph traversal
-        since we need to create a copy for each node & assign neighbors to each one, this is a recursive problem
-        the basic idea is to create a copy & then call the recursive function for each neighbor to do the same
+    we can solve this problem using dfs graph traversal 
+        we can put a twist in the problem's approach
+            instead of doing the operations from empty rooms, we can do the operations from gates & work backwards
     
-    create a hashmap to track old nodes for new nodes
+    create a queue & set to take note of visited values
 
-    create a helper function that implements recursive dfs
-        input is the node currently processed
-        check if it already exists in hashmap
-            if it does, return the new node
-        if the node doesnt exist in the hashmap
-        create a copy for the node
-        insert it into the hashmap
-            assign value to old node
-        loop for each neighbor of old node
-            recursively call for each node
-            append the returned node (value) to copy node's neighbors array
-        return copy node  
+    loop thru the entire input to find gates & insert into queue
 
-    once all recursive functions are created, each & every node should be created & connections established.
+    now loop while queue is not empty
+        loop thru the queue in levels -- to increment distance value
+            pop from queue
+            update that location with distance 
+            insert all the horizontal & vertical nodes that are empty rooms into queue
+        increment distance value after each level
+    
+    since we're update values in-place, no need to return
     """
-    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
-        # if input node is null, return none
-        if not node:
-            return None
-        
-        # create hashmap to keep track of old & new nodes
-        oldToNew = {} # oldNode : New Node
+    def wallsAndGates(self, rooms: List[List[int]]) -> None:
+        """
+        Do not return anything, modify rooms in-place instead.
+        """
+        # create variables for ROW & COL length
+        ROWS, COLS = len(rooms), len(rooms[0])
+
+        # create visited set
+        visited = set()
+
+        # create a queue for bfs ops
+        queue = deque()
 
         # create helper function
-        def clone(node):
-            # check if node already exists in hashmap
-            if node in oldToNew:
-                return oldToNew[node] # return new node value from hashmap
+        def addVal(r, c):
+            # check if r, c are out of bounds
+            if r < 0 or r == ROWS or c < 0 or c == COLS:
+                return
+            
+            # check if r, c have already been visited or this location is an obstacle
+            if (r, c) in visited or rooms[r][c] == -1:
+                return
+            
+            # add to visited & queue
+            visited.add((r, c))
+            queue.append([r, c])
 
-            # if code reaches this point, it means need to create a new node
-            # create new node
-            copy = Node(node.val, []) # create with emtpy neighbors for now
+        # loop for rows
+        for r in range(ROWS):
+            # loop for cols
+            for c in range(COLS):
+                # check if location is a gate
+                if rooms[r][c] == 0:
+                    queue.append([r, c]) # add to queue
+                    visited.add((r, c)) # add to visited
+        
+        # initialize variable for distance
+        dist = 0
+        
+        # loop while queue has values
+        while queue:
+            # loop thru queue in levels
+            maxLen = len(queue)
+            # loop for current level
+            for i in range(maxLen):
+                # pop from queue 
+                row, col = queue.popleft()
 
-            # assign new copy node's value to original node in hashmap
-            oldToNew[node] = copy
+                # assign current distance value to location
+                rooms[row][col] = dist
 
-            # Loop for each neighbour in node
-            for nei in node.neighbors:
-                # recursive call for each neighbor
-                # append the return result of each function call to neighbors - those are the copied nodes
-                copy.neighbors.append(clone(nei))     
-                # This makes sure, all neighbours are being created & connections are being made
+                # calls for horizontal & veritical rows
+                addVal(row + 1, col)
+                addVal(row - 1, col)
+                addVal(row, col + 1)
+                addVal(row, col - 1)
 
-            # Return copy
-            return copy
-
-        return clone(node)
+            # increment distance for next level
+            dist += 1
 
