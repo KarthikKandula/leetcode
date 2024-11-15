@@ -2,8 +2,6 @@
 
 1 possible solution for this problem  
 
-learn djisktra's algo later
-
 ## Method 1
 
 ## Problem Intuition
