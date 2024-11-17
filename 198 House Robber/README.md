@@ -2,7 +2,7 @@
 
 1 possible solution for this problem  
 
-## Method 1 (Recursive approach)
+## Method 1
 
 ## Problem Intuition
 The task is to determine the maximum amount of money you can rob from a row of houses, where adjacent houses cannot be robbed on the same night. This problem can be solved using dynamic programming by calculating the maximum amount at each house based on prior decisions.
