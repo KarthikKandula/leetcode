@@ -7,31 +7,13 @@
 
 ```
 """
-    the idea is to perform basic multiplication but convert it to code
-        while performing multiplication for 2 digit or more digit numbers
-        we do it in a nested loop formate i.e, multiply each digit with each other
-        and after each levels do it so as to skip one level from right
-
-        we achieve the same functionality but by using nested loops
-        the functionaly of skipping levels from right can be achieved by adding both indexes
-    
-    create a result array with max possible length 
-        i.e add length of both numbers
-    
-    reverse both inputs since we'll be processing both values in reverse
-    
-    create a nested loop to go thru each element for both numbers
-        multiply each location values
-        insert the product to the result array in [i + j] location -- skipping levels from right
-            value to keep in the location is remainder -- %
-        if any carry exists, insert in next location [i + j + 1]
-            carry is the product of the number -- //
-    
-    after nested loop is done product is in reverse order in result array
-        reverse the array again 
-        remove any preceding 0's
-    
-    convert values to string & generate string to return output
+    the first condition for a square to be formed by two different points is that they're diagonal to each other
+        for diagonal points, the diff of x & y values is equal
+        once we find a diagonal points, we need to find the other two points to complete forming a square
+        to find these other points
+            we can interchange x & y values from each points to see if they exist in hashmap
+            ex: x1, y1 & x2, y2 (diagonal points found) --> x1, y2 & x2, y1 (new points to be found)
+            if those points exist, we can mutiply their counts to get the no. of squares that can be formed
 """
 ```
 
