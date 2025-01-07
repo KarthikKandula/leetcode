@@ -1,58 +1,48 @@
 class Solution:
-    def getFood(self, grid: List[List[str]]) -> int:
-        # get length of rows & cols
-        ROWS, COLS = len(grid), len(grid[0])
+    """
+    this problem can be solved with good understanding of how permutations work
+        Permutations are arranged in lexicographical (dictionary) order.
+        the rightmost part of the array is the "fastest-changing" part, while the leftmost part changes the slowest.
+        The rightmost portion of the array determines the smallest possible changes that can be made to form the next permutation
+        To get the next lexicographically larger permutation, you want to change the smallest possible part of the array to ensure it remains as close to the current permutation as possible
+    
+        since the order of permutations is decided by changing the values towards the end
+            we look from the right when this pattern is broken
+                the first decreasing element is the point where the next largest permutation can be found
+            by finding the value that is immediately next to this value & swapping it
+                we form the next higher value
+            in the end reverse all values from i to end 
+                since for the next permutation, the values always appear in ascending order
+    """
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # create i pointer at the 2nd last location
+        i = len(nums) - 2
 
-        # create queue to implement bfs
-        q = deque()
+        # find the first decreasing element
+        while i >= 0 and nums[i] >= nums[i + 1]:
+            i -= 1
 
-        # loop thru each location & get all food locations
-        for r in range(ROWS):
-            for c in range(COLS):
-                if grid[r][c] == '#':
-                    q.append((r, c)) # append (r, c) to queue if it is food
+        # find the element just greater than i
+        if i >= 0:
+            j = len(nums) - 1
+            while nums[j] <= nums[i]:
+                j -= 1
+            # swap the element
+            self.swap(nums, i, j)
+    
+        # reverse everything in i + 1
+        self.reverse(nums, i + 1)
+    
+    def reverse(self, nums, start):
+        i, j = start, len(nums) - 1
 
-        level = 1 # variable to track current level
-
-        # define directions for easier implementation
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-
-        # loop thru queue
-        while q:
-            # get length of the current queue level
-            qLen = len(q)
-
-            # loop thru current queue level
-            for i in range(qLen):
-                # pop from queue
-                qr, qc = q.popleft()
-
-                # loop for each direction
-                for dr, dc in directions:
-                    # get new r, c locations
-                    nr, nc = qr + dr, qc + dc
-
-                    # if out of bounds
-                    if nr < 0 or nr >= ROWS or nc < 0 or nc >= COLS:
-                        continue
-                    
-                    # if value is obstacle or food cell --> continue
-                    if grid[nr][nc] == 'X' or grid[nr][nc] == '#':
-                        continue
-                    
-                    # if new location is food, return level value
-                    if grid[nr][nc] == '*':
-                        return level
-                    
-                    # if not, it's an empty space
-                    # update value to X to avoid revisit
-                    grid[nr][nc] = 'X'
-
-                    # append new location to queue
-                    q.append((nr, nc))
-            
-            # increment level to indicate another level has completed
-            level += 1
-
-        # return -1 if return is not hit inside
-        return -1
+        while i < j:
+            self.swap(nums, i, j)
+            i += 1
+            j -= 1
+ 
+    def swap(self, nums, i, j):
+        nums[i], nums[j] = nums[j], nums[i]
